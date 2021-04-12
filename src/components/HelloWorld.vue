@@ -26,7 +26,6 @@
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
   </p>
 
-  <button @click="count++">count is: {{ count }}</button>
   <p>Position x: {{ x }}</p>
   <p>Position y: {{ y }}</p>
   <p>
@@ -36,8 +35,9 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
-import { useMouse, usePreferredDark, useLocalStorage } from "@vueuse/core";
+import { random } from "lodash";
+import { defineComponent } from "vue";
+import { useMouse } from "@vueuse/core";
 
 export default defineComponent({
   name: "HelloWorld",
@@ -48,21 +48,16 @@ export default defineComponent({
     },
   },
   setup: () => {
-    const count = ref(0);
-
     // tracks mouse position
-    const { x, y } = useMouse();
+    let _x, _y;
 
-    // is user prefers dark theme
-    const isDark = usePreferredDark();
+    if (random(1, 4) % 2) {
+      let { x, y } = useMouse();
+      _x = x;
+      _y = y;
+    }
 
-    // persist state in localStorage
-    const store = useLocalStorage("my-storage", {
-      name: "Apple",
-      color: "red",
-    });
-
-    return { x, y, isDark, store, count };
+    return { x: _x, y: _y };
   },
 });
 </script>
