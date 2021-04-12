@@ -27,6 +27,8 @@
   </p>
 
   <button @click="count++">count is: {{ count }}</button>
+  <p>Position x: {{ x }}</p>
+  <p>Position y: {{ y }}</p>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
