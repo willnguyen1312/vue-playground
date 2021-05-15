@@ -8,7 +8,7 @@
     <div
       v-for="item in getList(1)"
       :key="item.id"
-      class="drag-el"
+      class="drag-el text"
       draggable="true"
       @dragstart="startDrag($event, item)"
     >
@@ -25,7 +25,7 @@
     <div
       v-for="item in getList(2)"
       :key="item.id"
-      class="drag-el"
+      class="drag-el text"
       draggable="true"
       @dragstart="startDrag($event, item)"
     >
@@ -70,9 +70,11 @@ const onDrop = (evt: any, list: any) => {
     item.list = list;
   }
 };
+
+const color = "red";
 </script>
 
-<style>
+<style scoped>
 .drop-zone {
   background-color: #eee;
   margin-bottom: 10px;
@@ -83,5 +85,9 @@ const onDrop = (evt: any, list: any) => {
   background-color: #fff;
   margin-bottom: 10px;
   padding: 5px;
+}
+
+.text {
+  color: v-bind(color);
 }
 </style>
