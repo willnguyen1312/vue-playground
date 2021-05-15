@@ -34,62 +34,45 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 
-export default defineComponent({
-  name: "App",
-  setup() {
-    const items = ref([
-      {
-        id: 0,
-        title: "Item A",
-        list: 1,
-      },
-      {
-        id: 1,
-        title: "Item B",
-        list: 1,
-      },
-      {
-        id: 2,
-        title: "Item C",
-        list: 2,
-      },
-    ]);
-
-    const getList = (list: any) =>
-      items.value.filter((item) => item.list === list);
-
-    const startDrag = (evt: any, item: any) => {
-      evt.dataTransfer.dropEffect = "move";
-      evt.dataTransfer.effectAllowed = "move";
-      evt.dataTransfer.setData("itemID", item.id);
-    };
-
-    const onDrop = (evt: any, list: any) => {
-      const itemID = evt.dataTransfer.getData("itemID");
-      const item = items.value.find((item) => item.id == itemID);
-      if (item) {
-        item.list = list;
-      }
-    };
-
-    return { getList, startDrag, onDrop };
+const items = ref([
+  {
+    id: 0,
+    title: "Item A",
+    list: 1,
   },
-});
+  {
+    id: 1,
+    title: "Item B",
+    list: 1,
+  },
+  {
+    id: 2,
+    title: "Item C",
+    list: 2,
+  },
+]);
+
+const getList = (list: any) => items.value.filter((item) => item.list === list);
+
+const startDrag = (evt: any, item: any) => {
+  evt.dataTransfer.dropEffect = "move";
+  evt.dataTransfer.effectAllowed = "move";
+  evt.dataTransfer.setData("itemID", item.id);
+};
+
+const onDrop = (evt: any, list: any) => {
+  const itemID = evt.dataTransfer.getData("itemID");
+  const item = items.value.find((item) => item.id == itemID);
+  if (item) {
+    item.list = list;
+  }
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
 .drop-zone {
   background-color: #eee;
   margin-bottom: 10px;
