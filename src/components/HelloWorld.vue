@@ -1,81 +1,98 @@
 <template>
-  <h1>{{ msg }}</h1>
-
-  <p>
-    Recommended IDE setup:
-    <a href="https://code.visualstudio.com/" target="_blank">VSCode</a>
-    +
-    <a
-      href="https://marketplace.visualstudio.com/items?itemName=octref.vetur"
-      target="_blank"
-      >Vetur</a
+  <div>
+    <div
+      class="drop-zone"
+      @drop="onDrop($event, 1)"
+      @dragover.prevent
+      @dragenter.prevent
     >
-    or
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-    (if using
-    <code>&lt;script setup&gt;</code>)
-  </p>
-
-  <p>See <code>README.md</code> for more information.</p>
-
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank"
-      >Vite Docs</a
+      <div
+        class="drag-el"
+        v-for="item in listOne"
+        :key="item.title"
+        draggable
+        @dragstart="startDrag($event, item)"
+      >
+        {{ item.title }}
+      </div>
+    </div>
+    <div
+      class="drop-zone"
+      @drop="onDrop($event, 2)"
+      @dragover.prevent
+      @dragenter.prevent
     >
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
-
-  <p>Position x: {{ x }}</p>
-  <p>Position y: {{ y }}</p>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+      <div
+        class="drag-el"
+        v-for="item in listTwo"
+        :key="item.title"
+        draggable
+        @dragstart="startDrag($event, item)"
+      >
+        {{ item.title }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { random } from "lodash";
-import { defineComponent } from "vue";
-import { useMouse } from "@vueuse/core";
+import { defineComponent, reactive, computed } from "vue";
 
 export default defineComponent({
   name: "HelloWorld",
-  props: {
-    msg: {
-      type: String,
-      required: true,
-    },
-  },
   setup: () => {
-    // tracks mouse position
-    let _x, _y;
+    const dndData = reactive([
+      {
+        id: 0,
+        title: "Item A",
+        list: 1,
+      },
+      {
+        id: 1,
+        title: "Item B",
+        list: 1,
+      },
+      {
+        id: 2,
+        title: "Item C",
+        list: 2,
+      },
+    ]);
 
-    if (random(1, 4) % 2) {
-      let { x, y } = useMouse();
-      _x = x;
-      _y = y;
-    }
+    const listOne = computed(() => dndData.filter((item) => item.list === 1));
 
-    return { x: _x, y: _y };
+    const listTwo = computed(() => dndData.filter((item) => item.list === 2));
+
+    const startDrag = (evt: any, item: any) => {
+      console.log(123);
+      evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer.effectAllowed = "move";
+      evt.dataTransfer.setData("itemID", item.id);
+    };
+
+    const onDrop = (evt: any, list: any) => {
+      const itemID = evt.dataTransfer.getData("itemID");
+      const item = dndData.find((item) => item.id == itemID);
+      if (item) {
+        item.list = list;
+      }
+    };
+
+    return { listOne, listTwo, startDrag, onDrop };
   },
 });
 </script>
 
 <style scoped>
-a {
-  color: #42b983;
-}
-
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
-
-code {
+.drop-zone {
   background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.drag-el {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 5px;
 }
 </style>
