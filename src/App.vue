@@ -1,18 +1,27 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
+  <button @click="loadMe">Load me</button>
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { defineComponent, defineAsyncComponent, ref } from "vue";
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-})
+    HelloWorld: defineAsyncComponent({
+      loader: () => import("./components/HelloWorld.vue"),
+    }),
+  },
+  setup() {
+    const showHello = ref(false);
+    const loadMe = () => {
+      showHello.value = true;
+    };
+    return { loadMe, showHello };
+  },
+});
 </script>
 
 <style>
