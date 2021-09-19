@@ -17,6 +17,7 @@ export default defineComponent({
   setup() {
     const showHello = ref(false);
     const loadMe = () => {
+      const resize = new ResizeObserver(() => {});
       showHello.value = true;
     };
     return { loadMe, showHello };
